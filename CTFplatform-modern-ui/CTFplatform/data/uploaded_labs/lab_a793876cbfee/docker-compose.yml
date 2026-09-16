@@ -1,0 +1,7 @@
+services:
+  lab5:
+    build: .
+    container_name: techcorp-lab5-phishing
+    ports:
+      - "5005:5000"
+    restart: unless-stopped

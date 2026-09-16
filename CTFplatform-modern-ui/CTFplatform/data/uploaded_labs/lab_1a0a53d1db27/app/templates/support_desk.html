@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TechCorp Support Desk</title>
+<style>
+body{margin:0;background:#eef3f6;color:#20303a;font:15px Arial,sans-serif}
+.top{background:#102a33;color:#fff;padding:18px 28px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:21px;font-weight:700}.badge{background:#1f8b78;padding:6px 10px;border-radius:15px;font-size:12px}
+.wrap{max-width:920px;margin:28px auto;padding:0 20px}.card{background:#fff;border:1px solid #d8e1e5;border-radius:12px;padding:22px;margin-bottom:18px;box-shadow:0 5px 18px #0000000d}
+h1{margin-top:0}.ticket{border-left:4px solid #2dbf9f;padding:14px 18px;background:#f7fafb;margin:12px 0;border-radius:7px}
+.ticket b{display:block;margin-bottom:7px}.hint{background:#fff7df;border:1px solid #efd98a;padding:13px;border-radius:8px}
+input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #bbc9cf;border-radius:7px;font-size:15px;margin:8px 0 12px}
+button{padding:11px 17px;border:0;border-radius:7px;background:#20b995;color:#fff;font-weight:700;cursor:pointer}
+code{background:#edf2f4;padding:2px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="top"><div class="brand">TechCorp Support Desk</div><div class="badge">TRAINING ENVIRONMENT</div></div>
+<div class="wrap">
+  <div class="card">
+    <h1>Employee Support Tickets</h1>
+    <p>Review recent tickets or create a test ticket for the investigation.</p>
+    <div class="ticket"><b>Printer not working</b>The third-floor printer is showing an offline status.</div>
+    <div class="ticket"><b>Password reset request</b>Please help me reset my temporary password.</div>
+    <div class="ticket"><b>VPN connection problem</b>VPN connection drops after sleep mode.</div>
+  </div>
+
+  <div class="card">
+    <h2>Create a test ticket</h2>
+    <form method="get" action="/lab">
+      <label for="message"><strong>Ticket message</strong></label>
+      <input id="message" name="message" placeholder="VPN connection is not working." autocomplete="off">
+      <button type="submit">Submit Ticket</button>
+    </form>
+  </div>
+
+  {% if message %}
+  <div class="card">
+    <h2>Ticket #TC-1042</h2>
+    <p><strong>Employee message:</strong></p>
+    <!-- INTENTIONAL LAB VULNERABILITY: reflected XSS -->
+    <div class="ticket">{{ message|safe }}</div>
+    <div class="hint">
+      <strong>Lab test:</strong> Use only the harmless payload supplied by the exercise:
+      <code>&lt;script&gt;alert('TechCorp XSS Lab')&lt;/script&gt;</code>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="card">
+    <strong>Investigation hint</strong>
+    <p>For Mission 4, open browser Developer Tools and inspect the request URL and the resulting page source/DOM.</p>
+  </div>
+</div>
+</body>
+</html>

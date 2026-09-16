@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Profile #{{ target['emp_id'] }} — TechCorp Portal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">TECH<span>CORP</span> EMPLOYEE MANAGEMENT PORTAL</div>
+    <div class="userinfo">Welcome, {{ user['display_name'] }} &middot; <a href="{{ url_for('logout') }}" style="color:var(--text-dim);">Logout</a></div>
+  </div>
+  <div class="container">
+    <nav class="portal-nav">
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a class="active" href="{{ url_for('profile', emp_id=user['emp_id']) }}">My Profile</a>
+    </nav>
+
+    <div class="card">
+      <h2>Employee Profile</h2>
+      <p style="color:var(--text-dim); font-size:14px;">
+        {% if is_own %}
+          You are viewing <strong>your own</strong> employee record (ID #{{ target['emp_id'] }}).
+        {% else %}
+          Viewing employee record <strong>ID #{{ target['emp_id'] }}</strong>.
+        {% endif %}
+      </p>
+      <table>
+        <tr><th>Field</th><th>Value</th></tr>
+        <tr><td>Employee ID</td><td>{{ target['emp_id'] }}</td></tr>
+        <tr><td>Display Name</td><td>{{ target['display_name'] }}</td></tr>
+        <tr><td>Department</td><td>{{ target['department'] }}</td></tr>
+        <tr><td>Role</td><td><span class="badge badge-{{ target['role'] }}">{{ target['role'] }}</span></td></tr>
+        <tr><td>Email</td><td>{{ target['email'] }}</td></tr>
+        <tr><td>Phone</td><td>{{ target['phone'] }}</td></tr>
+      </table>
+
+      {% if show_flag %}
+      <div class="flag-box">
+        <strong>Confidential Employee Record</strong>
+        <p style="font-size:13px; color:var(--text-dim); margin: 6px 0 0;">
+          This record belongs to another employee and should not be visible to you.
+        </p>
+        <code>FLAG: TECHCORP{idor_found}</code>
+      </div>
+      <p style="font-size:13px; color:var(--text-dim); margin-top:14px;">
+        Head back to the task panel to submit this flag.
+      </p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

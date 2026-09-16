@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab 4 — The Strange Support Ticket</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+<aside class="sidebar">
+  <div class="case-card">
+    <div class="case-row">
+      <span class="case-id">CASE XSS-004</span>
+      <span class="status"><span class="dot"></span><span id="statusText">NOT STARTED</span></span>
+    </div>
+    <div class="crumb">Learn › The Strange Support Ticket</div>
+    <h1>The Strange Support Ticket</h1>
+    <p class="description">TechCorp's Support Desk is displaying employee messages strangely. Investigate how user-controlled input reaches the browser.</p>
+    <div class="meta"><span>🟢 Beginner</span><span>◷ ~20 min</span><span>🏷 Reflected XSS</span></div>
+    <div class="actions">
+      <button id="startBtn" class="primary">▶ Start Lab</button>
+      <button id="browserBtn" class="secondary">🖥 Open Browser</button>
+      <button id="terminalBtn" class="secondary">&gt;_ Terminal</button>
+      <form method="post" action="/reset"><button class="danger">↻ Reset Lab</button></form>
+    </div>
+  </div>
+
+  <div class="missions">
+    <div class="mission-header">LAB MISSIONS</div>
+
+    <section class="mission open">
+      <button class="mission-toggle" onclick="this.parentElement.classList.toggle('open')">
+        <span><b>TASK 1</b> Briefing</span><span>⌄</span>
+      </button>
+      <div class="mission-body">
+        <p><strong>Sarah:</strong> “The Employee Portal is working better now, but our Support Desk is showing some strange ticket messages. I want you to investigate how ticket messages are displayed.”</p>
+        <p>Sarah's warning: “Whenever an application displays user input, don't assume that input is safe.”</p>
+        <p>Follow the input from the employee to the browser, collect evidence, and identify a basic defense.</p>
+        <div class="callout">⚠️ Training environment only. Do not test outside this lab.</div>
+      </div>
+    </section>
+
+    {% for m in missions %}
+    <section class="mission" id="mission-{{m.id}}">
+      <button class="mission-toggle" onclick="toggleMission({{m.id}})">
+        <span><b>TASK {{m.id+1}}</b> {{m.title}}</span>
+        <span class="check" id="check-{{m.id}}">{% if m.id in completed %}✓{% endif %}</span>
+      </button>
+      <div class="mission-body">
+        <div class="story">{{ m.story|replace('\n','<br>')|safe }}</div>
+        <div class="task-box"><strong>Your Task</strong><p>{{m.task}}</p></div>
+        <div class="quiz">
+          <div class="quiz-label">KNOWLEDGE CHECK</div>
+          <p><strong>{{m.quiz}}</strong></p>
+          <div class="options">
+            {% for option in m.options %}
+            <button class="option" data-answer="{{option|e}}" onclick="answerMission({{m.id}}, this)">{{option}}</button>
+            {% endfor %}
+          </div>
+          <div class="feedback" id="feedback-{{m.id}}"></div>
+        </div>
+      </div>
+    </section>
+    {% endfor %}
+  </div>
+</aside>
+
+<main class="workspace">
+  <div class="browser-top">
+    <div>TECHCORP • VIRTUAL LAB</div>
+    <div class="browser-tools">● ● ●</div>
+  </div>
+
+  <div id="readyPanel" class="ready-panel">
+    <div class="monitor">🖥️</div>
+    <h2>Virtual Lab Ready</h2>
+    <p>Your virtual lab machine has been provisioned. Click below to start your timed lab session and open the TechCorp Support Desk.</p>
+    <button id="readyStart" class="primary large">▶ Start Lab</button>
+  </div>
+
+  <div id="labPanel" class="lab-panel hidden">
+    <iframe id="labFrame" title="TechCorp Support Desk"></iframe>
+  </div>
+
+  <div id="terminalPanel" class="terminal-panel hidden">
+    <div class="terminal-head">TechCorp Training Terminal</div>
+    <pre>student@techcorp-lab:~$ echo "Follow request -> response -> browser"
+Follow request -> response -> browser
+
+student@techcorp-lab:~$ echo "Use Developer Tools for Mission 4"
+Use Developer Tools for Mission 4
+
+student@techcorp-lab:~$</pre>
+  </div>
+</main>
+</div>
+<script>
+const initialCompleted = {{ completed|tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

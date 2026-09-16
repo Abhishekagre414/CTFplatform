@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Documents — TechCorp Portal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">TECH<span>CORP</span> EMPLOYEE DOCUMENT PORTAL</div>
+    <div class="userinfo">Welcome, {{ user['display_name'] }} &middot; <a href="{{ url_for('logout') }}" style="color:var(--text-dim);">Logout</a></div>
+  </div>
+  <div class="container">
+    <nav class="portal-nav">
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a class="active" href="{{ url_for('documents') }}">My Documents</a>
+    </nav>
+
+    <div class="card">
+      <h2>My Documents</h2>
+      <p style="color:var(--text-dim); font-size:14px;">
+        Files stored for <span class="badge badge-employee">{{ emp_id }}</span>.
+        Each document is loaded from the portal's file store.
+      </p>
+
+      <ul class="doc-list">
+        {% for name in my_docs %}
+        <li>
+          <span class="doc-icon">📄</span>
+          <a href="{{ url_for('files', subpath=emp_id + '/' + name) }}" target="_blank">{{ name }}</a>
+          <span class="doc-path">/files/{{ emp_id }}/{{ name }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <p style="font-size:13px; color:var(--text-dim); margin-top:14px;">
+        Tip for your investigation: notice how each document opens from a
+        <strong>predictable file path</strong>. Watch what your browser requests
+        when you click a document.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

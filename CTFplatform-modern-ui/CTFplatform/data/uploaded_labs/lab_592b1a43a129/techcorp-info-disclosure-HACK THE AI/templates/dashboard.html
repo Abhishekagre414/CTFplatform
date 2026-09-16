@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard — TechCorp Portal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">TECH<span>CORP</span> EMPLOYEE DOCUMENT PORTAL</div>
+    <div class="userinfo">Welcome, {{ user['display_name'] }} &middot; <a href="{{ url_for('logout') }}" style="color:var(--text-dim);">Logout</a></div>
+  </div>
+  <div class="container">
+    <nav class="portal-nav">
+      <a class="active" href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('documents') }}">My Documents</a>
+    </nav>
+
+    <div class="card">
+      <h2>Welcome, {{ user['display_name'] }}</h2>
+      <p>Employee ID: <span class="badge badge-employee">{{ user['employee_id'] }}</span></p>
+      <p style="color:var(--text-dim); font-size:14px;">
+        This portal lets you view your personal work documents — your profile,
+        training records, and payslips. Open <strong>My Documents</strong> to see
+        the files stored for your account.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Continue your investigation</h3>
+      <p style="font-size:14px; color:var(--text-dim);">
+        Head back to the task panel on the left to review your next objective.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

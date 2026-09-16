@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab 5 — The Suspicious Email</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+<aside class="sidebar">
+  <div class="case-card">
+    <div class="case-row">
+      <span class="case-id">CASE PHISH-005</span>
+      <span class="status"><span class="dot"></span><span id="statusText">NOT STARTED</span></span>
+    </div>
+    <div class="crumb">Learn › The Suspicious Email</div>
+    <h1>The Suspicious Email</h1>
+    <p class="description">Employees at TechCorp are receiving strange emails. Investigate the Mail Center and learn to spot phishing before someone clicks the wrong link.</p>
+    <div class="meta"><span>🟢 Beginner</span><span>◷ ~15 min</span><span>📧 Phishing &amp; Social Engineering</span></div>
+    <div class="actions">
+      <button id="startBtn" class="primary">▶ Start Lab</button>
+      <button id="browserBtn" class="secondary">🖥 Open Mail Center</button>
+      <button id="terminalBtn" class="secondary">&gt;_ Terminal</button>
+      <form method="post" action="/reset"><button class="danger">↻ Reset Lab</button></form>
+    </div>
+  </div>
+
+  <div class="missions">
+    <div class="mission-header">LAB MISSIONS</div>
+
+    <section class="mission open">
+      <button class="mission-toggle" onclick="this.parentElement.classList.toggle('open')">
+        <span><b>TASK 1</b> Briefing</span><span>⌄</span>
+      </button>
+      <div class="mission-body">
+        <p><strong>Sarah:</strong> “We've noticed several employees receiving suspicious emails. Nobody has confirmed whether they're real or fake. I want you to investigate before someone clicks the wrong link.”</p>
+        <p>This time it's not a technical bug — the employee reading the message is part of the security system. Follow the clues, inspect the Mail Center, and learn what makes a message trustworthy or dangerous.</p>
+        <div class="callout">⚠️ Training environment only. All emails, senders, and links are fictional. No real messages are sent.</div>
+      </div>
+    </section>
+
+    {% for m in missions %}
+    <section class="mission" id="mission-{{m.id}}">
+      <button class="mission-toggle" onclick="toggleMission({{m.id}})">
+        <span><b>TASK {{m.id+1}}</b> {{m.title}}</span>
+        <span class="check" id="check-{{m.id}}">{% if m.id in completed %}✓{% endif %}</span>
+      </button>
+      <div class="mission-body">
+        <div class="story">{{ m.story|replace('\n','<br>')|safe }}</div>
+        <div class="task-box"><strong>Your Task</strong><p>{{m.task}}</p></div>
+        <div class="quiz">
+          <div class="quiz-label">KNOWLEDGE CHECK</div>
+          <p><strong>{{m.quiz}}</strong></p>
+          <div class="options">
+            {% for option in m.options %}
+            <button class="option" data-answer="{{option|e}}" onclick="answerMission({{m.id}}, this)">{{option}}</button>
+            {% endfor %}
+          </div>
+          <div class="feedback" id="feedback-{{m.id}}"></div>
+        </div>
+      </div>
+    </section>
+    {% endfor %}
+  </div>
+</aside>
+
+<main class="workspace">
+  <div class="browser-top">
+    <div>TECHCORP • MAIL CENTER (SIMULATED)</div>
+    <div class="browser-tools">● ● ●</div>
+  </div>
+
+  <div id="readyPanel" class="ready-panel">
+    <div class="monitor">📧</div>
+    <h2>Mail Center Ready</h2>
+    <p>Your simulated inbox has been provisioned. Click below to open the TechCorp Mail Center and start investigating.</p>
+    <button id="readyStart" class="primary large">▶ Start Lab</button>
+  </div>
+
+  <div id="labPanel" class="lab-panel hidden">
+    <iframe id="labFrame" title="TechCorp Mail Center"></iframe>
+  </div>
+
+  <div id="terminalPanel" class="terminal-panel hidden">
+    <div class="terminal-head">TechCorp Training Terminal</div>
+    <pre>student@techcorp-lab:~$ echo "Hover before you click"
+Hover before you click
+
+student@techcorp-lab:~$ echo "Verify through a trusted channel, not the email itself"
+Verify through a trusted channel, not the email itself
+
+student@techcorp-lab:~$</pre>
+  </div>
+</main>
+</div>
+<script>
+const initialCompleted = {{ completed|tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

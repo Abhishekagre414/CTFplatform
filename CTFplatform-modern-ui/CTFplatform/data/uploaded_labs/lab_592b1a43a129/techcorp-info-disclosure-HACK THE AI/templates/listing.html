@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Index of {{ display }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">TECH<span>CORP</span> FILE STORE</div>
+  </div>
+  <div class="container">
+    <div class="card">
+      <h2>Index of {{ display }}</h2>
+      <div class="index-listing">
+        {% if parent %}
+        <div>📁 <a href="{{ parent }}">../</a></div>
+        {% endif %}
+        {% for e in entries %}
+        <div>
+          {% if e.is_dir %}📁 <a class="dir" href="{{ e.href }}">{{ e.name }}</a>
+          {% else %}📄 <a href="{{ e.href }}">{{ e.name }}</a>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      <p class="index-note">
+        TechCorp file store — this listing shows the contents of the requested
+        directory.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
