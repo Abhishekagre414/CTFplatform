@@ -1,11 +1,14 @@
 import os
 from pypdf import PdfReader
-import google.generativeai as genai
 import time
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
 
 # Configure Gemini API if available
 api_key = os.environ.get("GEMINI_API_KEY")
-if api_key:
+if api_key and genai:
     genai.configure(api_key=api_key)
 
 def extract_text_from_pdf(file_stream):

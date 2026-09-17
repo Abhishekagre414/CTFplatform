@@ -1,4 +1,7 @@
-import docker
+try:
+    import docker
+except ImportError:
+    docker = None
 import os
 import re
 import json
