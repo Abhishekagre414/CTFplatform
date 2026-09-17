@@ -32,20 +32,20 @@ csrf.init_app(app)
 limiter.init_app(app)
 logger.info(f"Rate limiter storage backend: {app.config.get('RATELIMIT_STORAGE_URI')}")
 
-# Set up Redis for sessions (Only if we are in production / docker)
-if os.environ.get('FLASK_ENV') == 'production' or os.environ.get('REDIS_URL'):
+# Set up Redis for sessions (Only if REDIS_URL is explicitly provided)
+if os.environ.get('REDIS_URL'):
     try:
         app.config['SESSION_TYPE'] = 'redis'
         app.config['SESSION_PERMANENT'] = False
         app.config['SESSION_USE_SIGNER'] = True
-        redis_url = os.environ.get('REDIS_URL', 'redis://redis:6379/0')
-        app.config['SESSION_REDIS'] = redis.from_url(redis_url)
+        redis_url = os.environ.get('REDIS_URL')
+        app.config['SESSION_REDIS'] = redis.from_url(redis_url, socket_timeout=2)
         Session(app)
         logger.info("Redis session management initialized.")
     except Exception as e:
         logger.warning(f"Could not connect to Redis for sessions. Falling back to default cookies. Error: {e}")
 else:
-    logger.info("Using default cookie sessions for local development.")
+    logger.info("Using default cookie sessions for local development or serverless deployments.")
 
 # Set up strict security headers
 csp = {

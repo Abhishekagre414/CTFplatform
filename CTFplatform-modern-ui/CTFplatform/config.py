@@ -81,7 +81,7 @@ class Config:
     
     # Rate Limiting
     RATELIMIT_DEFAULT = os.environ.get("RATELIMIT_DEFAULT", "200 per day, 50 per hour")
-    RATELIMIT_STORAGE_URI = os.environ.get("RATELIMIT_STORAGE_URI", os.environ.get("REDIS_URL", "memory://"))
+    RATELIMIT_STORAGE_URI = "memory://" # Forced memory:// to prevent Redis connection timeouts on Vercel
 
     # CSRF tokens default to expiring after 1 hour (Flask-WTF's WTF_CSRF_TIME_LIMIT),
     # which is the same length as a lab session. A learner who spends a while
