@@ -54,6 +54,11 @@ def _get_or_create_persistent_secret_key():
         # Another worker won the race and wrote it first - read what it wrote.
         with open(key_path, 'r') as f:
             return f.read().strip()
+    except OSError:
+        print("WARNING: Could not write SECRET_KEY to disk (read-only filesystem?). "
+              "Using a transient key. Sessions will break on restart! "
+              "Set the SECRET_KEY environment variable explicitly for real deployments.")
+        return new_key
 
 
 class Config:
