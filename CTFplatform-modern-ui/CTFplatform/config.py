@@ -67,7 +67,12 @@ class Config:
 
     # Database
     DATABASE_PATH = os.path.join(BASE_DIR, 'database', 'hacktheai.db')
-    # Default to SQLite for local dev, override with PostgreSQL in production
+    # Database setup: use /tmp on Vercel since it's the only writable directory
+    if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV'):
+        DATABASE_PATH = '/tmp/hacktheai.db'
+    else:
+        DATABASE_PATH = os.path.join(BASE_DIR, 'database', 'hacktheai.db')
+        
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", f"sqlite:///{DATABASE_PATH}")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     

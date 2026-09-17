@@ -174,10 +174,17 @@ def health_check():
         "database": db_status
     }), 200 if db_status == "ok" else 503
 
+db_initialized = False
 
-
-
+@app.before_request
+def initialize_database():
+    global db_initialized
+    if not db_initialized:
+        try:
+            init_db()
+        except Exception as e:
+            logger.error(f"Failed to initialize database: {e}")
+        db_initialized = True
 
 if __name__ == '__main__':
-    init_db()
     app.run(debug=app.config['DEBUG'], port=5000)
